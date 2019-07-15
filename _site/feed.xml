@@ -3,10 +3,10 @@
   <channel>
     <title>Shuang Blog</title>
     <description>世界在变化，内心在变化，所以要变化。</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 15 Jul 2019 16:21:26 +0800</pubDate>
-    <lastBuildDate>Mon, 15 Jul 2019 16:21:26 +0800</lastBuildDate>
+    <link>http://0.0.0.0:4000/</link>
+    <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Mon, 15 Jul 2019 19:43:45 +0800</pubDate>
+    <lastBuildDate>Mon, 15 Jul 2019 19:43:45 +0800</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
     
       <item>
@@ -109,8 +109,8 @@ I arrived at the park after rained that morning,flower covered with dew.It was v
 &lt;/div&gt;
 </description>
         <pubDate>Mon, 15 Jul 2019 22:40:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/07/15/talk-ablout-Chrysanthemum/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/07/15/talk-ablout-Chrysanthemum/</guid>
+        <link>http://0.0.0.0:4000/2019/07/15/talk-ablout-Chrysanthemum/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2019/07/15/talk-ablout-Chrysanthemum/</guid>
         
         <category>菊花</category>
         
@@ -134,8 +134,8 @@ I arrived at the park after rained that morning,flower covered with dew.It was v
 
 </description>
         <pubDate>Sat, 13 Jul 2019 18:58:46 +0800</pubDate>
-        <link>http://localhost:4000/jekyll/update/2019/07/13/welcome-to-shuang-blog/</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2019/07/13/welcome-to-shuang-blog/</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2019/07/13/welcome-to-shuang-blog/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2019/07/13/welcome-to-shuang-blog/</guid>
         
         
         <category>jekyll</category>

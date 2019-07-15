@@ -1,0 +1,16 @@
+{
+  "name": "Shuang Blog",
+  "short_name": "Shuang Blog",
+  "description": "About an engineer & designer who loves life.",
+  "icons": [{
+    {
+    "src": "icons/400.png",
+    "sizes": "400x400",
+    "type": "image/png"
+  }],
+  "background_color": "#fff",
+  "theme_color": "#000",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}

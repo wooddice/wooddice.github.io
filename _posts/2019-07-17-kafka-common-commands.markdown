@@ -21,14 +21,17 @@ tags:
 1.逐次启动三台机器的zookeeper：
 {% highlight shell linenos%}
 /home/hadoop/zookeeper-3.4.12/bin/zkServer.sh start
+
 {% endhighlight %}
 2.检查zookeeper 状态：
 {% highlight shell linenos%}
 /home/hadoop/zookeeper-3.4.12/bin/zkServer.sh status
+
 {% endhighlight %}
 3.逐次启动三台机器的kafka（启动kafka前zookeeper必须是已经启动的）
 {% highlight shell linenos%}
 /home/hadoop/kafka_2.11-0.10.2.1/bin/kafka-server-start.sh -daemon /home/hadoop/kafka_2.11-0.10.2.1/config/server.properties&
+
 {% endhighlight %}
 
 ### 查看topics list

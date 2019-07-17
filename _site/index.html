@@ -16,8 +16,8 @@
     <meta property="og:type" content="website">
     <meta property="og:description" content="世界在变化，内心在变化，所以要变化">
     
-    <meta property="og:image" content="http://0.0.0.0:4000/img/avatar-ny.jpg">
-    <meta property="og:url" content="http://0.0.0.0:4000/">
+    <meta property="og:image" content="http://localhost:4000/img/avatar-ny.jpg">
+    <meta property="og:url" content="http://localhost:4000/">
     <meta property="og:site_name" content="Shuang的博客 | Shuang Blog">
     
     <title>Shuang的博客 | Shuang Blog</title>
@@ -29,7 +29,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://0.0.0.0:4000/">
+    <link rel="canonical" href="http://localhost:4000/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -203,7 +203,45 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2019/07/15/hell-in-heart/">
+    <a href="/2019/07/17/kafka-common-commands/">
+        <h2 class="post-title">
+            Kafka 常用命令
+        </h2>
+        
+        <h3 class="post-subtitle">
+            针对topic的创建和groupid的消费情况查看
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                
+  kafka使用版本：kafka_2.11-0.10.2.1
+
+
+启动kafka
+1.逐次启动三台机器的zookeeper：
+
+1
+/home/hadoop/zookeeper-3.4.12/bin/zkServer.sh start
+
+
+2.检查zookeeper 状态：
+
+1
+/home/hadoop/zookeeper-3.4.12/bin/zkServer.sh status
+
+...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Shuang on July 17, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2019/07/16/hell-in-heart-Copy/">
         <h2 class="post-title">
             地狱变相图图赏
         </h2>
@@ -264,7 +302,7 @@
         </div>
     </a>
     <p class="post-meta">
-        Posted by Shuang on July 15, 2019
+        Posted by Shuang on July 16, 2019
     </p>
 </div>
 <hr>
@@ -346,14 +384,18 @@
             
                 这是我的Blog，很好，这是一个新的开始，然后慢慢填充这个世界。
 
+1
+2
+3
+4
+5
+6
 public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello World");
     }
 }
-#=&gt; prints 'Hello World' to STDOUT.
-
-
+#=&gt; prints 'Hello World' t...
             
         </div>
     </a>

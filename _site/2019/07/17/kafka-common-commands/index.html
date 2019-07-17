@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="世界在变化，内心在变化，所以要变化。">
+    <meta name="keywords"  content="shuanglee, Blog, 博客, 个人网站, 互联网, Web">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Kafka 常用命令 - Shuang的博客 | Shuang Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="
+  kafka使用版本：kafka_2.11-0.10.2.1
+
+
+">
+    
+    <meta property="article:published_time" content="2019-07-17T17:18:00Z">
+    
+    
+    <meta property="article:author" content="Shuang">
+    
+    
+    <meta property="article:tag" content="kafka">
+    
+    <meta property="article:tag" content="bash">
+    
+    
+    <meta property="og:image" content="http://localhost:4000/img/avatar-ny.jpg">
+    <meta property="og:url" content="http://localhost:4000/2019/07/17/kafka-common-commands/">
+    <meta property="og:site_name" content="Shuang的博客 | Shuang Blog">
+    
+    <title>Kafka 常用命令 - Shuang的博客 | Shuang Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/07/17/kafka-common-commands/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Shuang Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="blog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#blog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __Nav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __Nav__.close()
+        }else{
+            __Nav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close Nav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __Nav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/in-post/code_head.png" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/in-post/code_head.png');
+        background: ;
+    }
+
+    
+    header.intro-header .header-mask{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(0,0,0, 0.3);
+    }
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=kafka" title="kafka">kafka</a>
+                        
+                        <a class="tag" href="/archive/?tag=bash" title="bash">bash</a>
+                        
+                    </div>
+                    <h1>Kafka 常用命令</h1>
+                    
+                    <h2 class="subheading">针对topic的创建和groupid的消费情况查看</h2>
+                    <span class="meta">Posted by Shuang on July 17, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<blockquote>
+  <p>kafka使用版本：kafka_2.11-0.10.2.1</p>
+</blockquote>
+
+<h3 id="启动kafka">启动kafka</h3>
+<p>1.逐次启动三台机器的zookeeper：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre>/home/hadoop/zookeeper-3.4.12/bin/zkServer.sh start
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>2.检查zookeeper 状态：</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre>/home/hadoop/zookeeper-3.4.12/bin/zkServer.sh status
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>3.逐次启动三台机器的kafka（启动kafka前zookeeper必须是已经启动的）</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre>/home/hadoop/kafka_2.11-0.10.2.1/bin/kafka-server-start.sh <span class="nt">-daemon</span> /home/hadoop/kafka_2.11-0.10.2.1/config/server.properties&amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="查看topics-list">查看topics list</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>kafka-topics.sh <span class="nt">--list</span> <span class="nt">--zookeeper</span> bdp-slave1:22181
+kafka-topics.sh <span class="nt">--describe</span> <span class="nt">--topic</span> landslide_topic  <span class="nt">--zookeeper</span> bdp-slave1:22181
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="创建topics">创建topics</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>kafka-topics.sh <span class="nt">--create</span> <span class="nt">--topic</span> landslide_topic <span class="nt">--partitions</span> 5 <span class="nt">--replication-factor</span> 1  <span class="se">\</span>
+<span class="nt">--zookeeper</span> bdp-slave1:22181
+
+kafka-topics.sh <span class="nt">--create</span> <span class="nt">--topic</span> tower_topic <span class="nt">--partitions</span> 1 <span class="nt">--replication-factor</span> 1  <span class="se">\</span>
+<span class="nt">--zookeeper</span> bdp-slave1:22181
+
+kafka-topics.sh <span class="nt">--create</span> <span class="nt">--topic</span> coapserver_log_topic <span class="nt">--partitions</span> 1 <span class="nt">--replication-factor</span> 1  <span class="se">\</span>
+<span class="nt">--zookeeper</span> bdp-slave1:22181
+kafka-topics.sh <span class="nt">--create</span> <span class="nt">--topic</span> pluginserver_log_topic <span class="nt">--partitions</span> 1 <span class="nt">--replication-factor</span> 1  <span class="se">\</span>
+<span class="nt">--zookeeper</span> bdp-slave1:22181
+kafka-topics.sh <span class="nt">--create</span> <span class="nt">--topic</span> cigserver_log_topic <span class="nt">--partitions</span> 1 <span class="nt">--replication-factor</span> 1  <span class="se">\</span>
+<span class="nt">--zookeeper</span> bdp-slave1:22181
+kafka-topics.sh <span class="nt">--create</span> <span class="nt">--topic</span> agentserver_log_topic <span class="nt">--partitions</span> 1 <span class="nt">--replication-factor</span> 1  <span class="se">\</span>
+<span class="nt">--zookeeper</span> bdp-slave1:22181
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="删除topic">删除topic</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>kafka-topics.sh <span class="nt">--delete</span> <span class="nt">--zookeeper</span> bdp-slave1:22181 <span class="nt">--topic</span> agentserver_log_topic
+kafka-topics.sh <span class="nt">--delete</span> <span class="nt">--zookeeper</span> bdp-slave1:22181 <span class="nt">--topic</span> coapserver_log_topic
+kafka-topics.sh <span class="nt">--delete</span> <span class="nt">--zookeeper</span> bdp-slave1:22181 <span class="nt">--topic</span> landslide_topic
+kafka-topics.sh <span class="nt">--delete</span> <span class="nt">--zookeeper</span> bdp-slave1:22181 <span class="nt">--topic</span> pluginserver_log_topic
+kafka-topics.sh <span class="nt">--delete</span> <span class="nt">--zookeeper</span> bdp-slave1:22181 <span class="nt">--topic</span> tower_topic
+
+<span class="c">#还需要去zookeeper中删除，步骤如下</span>
+zkCli.sh <span class="nt">-server</span> bdp-slave1:22181
+<span class="nb">ls</span> /brokers/topics
+<span class="o">[</span>coapserver_log_topic, tower_topic, pluginserver_log_topic, agentserver_log_topic, landslide_topic, __consumer_offsets]
+
+rmr /brokers/topics/coapserver_log_topic
+rmr /brokers/topics/tower_topic
+rmr /brokers/topics/pluginserver_log_topic
+rmr /brokers/topics/agentserver_log_topic
+rmr /brokers/topics/landslide_topic
+
+<span class="nb">ls</span> /consumers/
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="查看topic消费组状态">查看topic消费组状态</h3>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre>kafka-consumer-groups.sh <span class="nt">--bootstrap-server</span> bdp-slave1:29092 <span class="nt">--command-config</span> /home/hadoop/kafka_2.11-0.10.2.1/config/consumer.properties <span class="nt">--describe</span> <span class="nt">--group</span> landslideTest
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="关于highlight-显示效果查看">关于highlight 显示效果查看</h3>
+<p>abap</p>
+
+<figure class="highlight"><pre><code class="language-abap" data-lang="abap"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>   
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>actionscript</p>
+
+<figure class="highlight"><pre><code class="language-actionscript" data-lang="actionscript"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>apache</p>
+
+<figure class="highlight"><pre><code class="language-apache" data-lang="apache"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/</span>home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>apiblueprint</p>
+
+<figure class="highlight"><pre><code class="language-apiblueprint" data-lang="apiblueprint"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>applescript</p>
+
+<figure class="highlight"><pre><code class="language-applescript" data-lang="applescript"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="o">/</span><span class="nv">home</span><span class="o">/</span><span class="nv">hadoop</span><span class="o">/</span><span class="nv">testhighlinght</span><span class="p">.</span><span class="nv">sh</span><span class="w"> </span><span class="nb">start</span><span class="w"> </span><span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>awk</p>
+
+<figure class="highlight"><pre><code class="language-awk" data-lang="awk"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>biml</p>
+
+<figure class="highlight"><pre><code class="language-biml" data-lang="biml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>brainfuck</p>
+
+<figure class="highlight"><pre><code class="language-brainfuck" data-lang="brainfuck"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="c1">/home/hadoop/testhighlinght</span><span class="nf">.</span><span class="c1">sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>bsl</p>
+
+<figure class="highlight"><pre><code class="language-bsl" data-lang="bsl"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nv">home</span><span class="o">/</span><span class="nv">hadoop</span><span class="o">/</span><span class="nv">testhighlinght</span><span class="o">.</span><span class="nv">sh</span> <span class="nv">start</span> <span class="kd">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>c</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>ceylon</p>
+
+<figure class="highlight"><pre><code class="language-ceylon" data-lang="ceylon"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>cfscript</p>
+
+<figure class="highlight"><pre><code class="language-cfscript" data-lang="cfscript"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght.sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>clojure</p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="n">/home/hadoop/testhighlinght.sh</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>cmake</p>
+
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>coffeescript</p>
+
+<figure class="highlight"><pre><code class="language-coffeescript" data-lang="coffeescript"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/h</span><span class="nx">ome</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="na">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>common_lisp</p>
+
+<figure class="highlight"><pre><code class="language-common_lisp" data-lang="common_lisp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="nv">/home/hadoop/testhighlinght.sh</span> <span class="nv">start</span> <span class="nv">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>conf</p>
+
+<figure class="highlight"><pre><code class="language-conf" data-lang="conf"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/<span class="n">home</span>/<span class="n">hadoop</span>/<span class="n">testhighlinght</span>.<span class="n">sh</span> <span class="n">start</span> &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>console</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="go"> 
+/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>coq</p>
+
+<figure class="highlight"><pre><code class="language-coq" data-lang="coq"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="o">/</span><span class="no">home</span><span class="o">/</span><span class="no">hadoop</span><span class="o">/</span><span class="nn">testhighlinght</span><span class="p">.</span><span class="no">sh</span><span class="w"> </span><span class="no">start</span><span class="w"> </span><span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>cpp</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>crystal</p>
+
+<figure class="highlight"><pre><code class="language-crystal" data-lang="crystal"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="sr">/home/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="nf">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>csharp</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>css</p>
+
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nt">home</span><span class="o">/</span><span class="nt">hadoop</span><span class="o">/</span><span class="nt">testhighlinght</span><span class="nc">.sh</span> <span class="nt">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>d</p>
+
+<figure class="highlight"><pre><code class="language-d" data-lang="d"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>dart</p>
+
+<figure class="highlight"><pre><code class="language-dart" data-lang="dart"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="na">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>diff</p>
+
+<figure class="highlight"><pre><code class="language-diff" data-lang="diff"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/home/hadoop/testhighlinght.sh</span> start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>digdag</p>
+
+<figure class="highlight"><pre><code class="language-digdag" data-lang="digdag"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="s">/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>docker</p>
+
+<figure class="highlight"><pre><code class="language-docker" data-lang="docker"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>dot</p>
+
+<figure class="highlight"><pre><code class="language-dot" data-lang="dot"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/</span><span class="nv">home</span><span class="err">/</span><span class="nv">hadoop</span><span class="err">/</span><span class="nv">testhighlinght</span><span class="err">.</span><span class="nv">sh</span> <span class="nv">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>eiffel</p>
+
+<figure class="highlight"><pre><code class="language-eiffel" data-lang="eiffel"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="pi">.</span><span class="n">sh</span> <span class="n">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>elixir</p>
+
+<figure class="highlight"><pre><code class="language-elixir" data-lang="elixir"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>elm</p>
+
+<figure class="highlight"><pre><code class="language-elm" data-lang="elm"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>erb</p>
+
+<figure class="highlight"><pre><code class="language-erb" data-lang="erb"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>erlang</p>
+
+<figure class="highlight"><pre><code class="language-erlang" data-lang="erlang"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>escape</p>
+
+<figure class="highlight"><pre><code class="language-escape" data-lang="escape"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>factor</p>
+
+<figure class="highlight"><pre><code class="language-factor" data-lang="factor"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="n">/home/hadoop/testhighlinght.sh</span> <span class="nb">start</span> <span class="n">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>fortran</p>
+
+<figure class="highlight"><pre><code class="language-fortran" data-lang="fortran"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="err">.</span><span class="n">sh</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>fsharp</p>
+
+<figure class="highlight"><pre><code class="language-fsharp" data-lang="fsharp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>gherkin</p>
+
+<figure class="highlight"><pre><code class="language-gherkin" data-lang="gherkin"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/home/hadoop/testhighlinght.sh</span> <span class="err">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>glsl</p>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>go</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>gradle</p>
+
+<figure class="highlight"><pre><code class="language-gradle" data-lang="gradle"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="s">/home/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="na">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>graphql</p>
+
+<figure class="highlight"><pre><code class="language-graphql" data-lang="graphql"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="err">/home/hadoop/testhighlinght.sh</span><span class="w"> </span><span class="err">start</span><span class="w"> </span><span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>groovy</p>
+
+<figure class="highlight"><pre><code class="language-groovy" data-lang="groovy"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="s">/home/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="na">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>hack</p>
+
+<figure class="highlight"><pre><code class="language-hack" data-lang="hack"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="o">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>haml</p>
+
+<figure class="highlight"><pre><code class="language-haml" data-lang="haml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>handlebars</p>
+
+<figure class="highlight"><pre><code class="language-handlebars" data-lang="handlebars"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>haskell</p>
+
+<figure class="highlight"><pre><code class="language-haskell" data-lang="haskell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>hcl</p>
+
+<figure class="highlight"><pre><code class="language-hcl" data-lang="hcl"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/</span><span class="nx">home</span><span class="err">/</span><span class="nx">hadoop</span><span class="err">/</span><span class="nx">testhighlinght</span><span class="err">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>html</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>http</p>
+
+<figure class="highlight"><pre><code class="language-http" data-lang="http"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="err"> 
+/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>hylang</p>
+
+<figure class="highlight"><pre><code class="language-hylang" data-lang="hylang"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="n">/home/hadoop/testhighlinght.sh</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>idlang</p>
+
+<figure class="highlight"><pre><code class="language-idlang" data-lang="idlang"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>igorpro</p>
+
+<figure class="highlight"><pre><code class="language-igorpro" data-lang="igorpro"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>ini</p>
+
+<figure class="highlight"><pre><code class="language-ini" data-lang="ini"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/home/hadoop/testhighlinght.sh</span> <span class="err">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>io</p>
+
+<figure class="highlight"><pre><code class="language-io" data-lang="io"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>irb</p>
+
+<figure class="highlight"><pre><code class="language-irb" data-lang="irb"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="go"> 
+/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>java</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="na">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>javascript</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>jinja</p>
+
+<figure class="highlight"><pre><code class="language-jinja" data-lang="jinja"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>json</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="err">/home/hadoop/testhighlinght.sh</span><span class="w"> </span><span class="err">start</span><span class="w"> </span><span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>json-doc</p>
+
+<figure class="highlight"><pre><code class="language-json-doc" data-lang="json-doc"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="err">/home/hadoop/testhighlinght.sh</span><span class="w"> </span><span class="err">start</span><span class="w"> </span><span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>jsonnet</p>
+
+<figure class="highlight"><pre><code class="language-jsonnet" data-lang="jsonnet"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/</span><span class="nx">home</span><span class="err">/</span><span class="nx">hadoop</span><span class="err">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>jsp</p>
+
+<figure class="highlight"><pre><code class="language-jsp" data-lang="jsp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>jsx</p>
+
+<figure class="highlight"><pre><code class="language-jsx" data-lang="jsx"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>julia</p>
+
+<figure class="highlight"><pre><code class="language-julia" data-lang="julia"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>kotlin</p>
+
+<figure class="highlight"><pre><code class="language-kotlin" data-lang="kotlin"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>lasso</p>
+
+<figure class="highlight"><pre><code class="language-lasso" data-lang="lasso"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="p">/</span><span class="nx">home</span><span class="p">/</span><span class="nx">hadoop</span><span class="p">/</span><span class="nx">testhighlinght.sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>liquid</p>
+
+<figure class="highlight"><pre><code class="language-liquid" data-lang="liquid"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>literate_coffeescript</p>
+
+<figure class="highlight"><pre><code class="language-literate_c" data-lang="literate_c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+<p>offeescript
+ literate_haskell</p>
+
+<figure class="highlight"><pre><code class="language-literate_haske" data-lang="literate_haske"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+<p>ll
+ llvm</p>
+
+<figure class="highlight"><pre><code class="language-llvm" data-lang="llvm"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/home/hadoop/testhighlinght</span><span class="p">.</span><span class="err">sh</span> <span class="err">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>lua</p>
+
+<figure class="highlight"><pre><code class="language-lua" data-lang="lua"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>m68k</p>
+
+<figure class="highlight"><pre><code class="language-m68k" data-lang="m68k"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nv">home</span><span class="o">/</span><span class="nv">hadoop</span><span class="o">/</span><span class="nv">testhighlinght</span><span class="p">.</span><span class="nv">sh</span> <span class="nv">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>magik</p>
+
+<figure class="highlight"><pre><code class="language-magik" data-lang="magik"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>make</p>
+
+<figure class="highlight"><pre><code class="language-make" data-lang="make"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/home/hadoop/testhighlinght.sh</span> <span class="err">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>markdown</p>
+
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>mathematica</p>
+
+<figure class="highlight"><pre><code class="language-mathematica" data-lang="mathematica"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="o">/</span><span class="nv">home</span><span class="o">/</span><span class="nv">hadoop</span><span class="o">/</span><span class="nv">testhighlinght</span><span class="o">.</span><span class="nv">sh</span><span class="w"> </span><span class="nv">start</span><span class="w"> </span><span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>matlab</p>
+
+<figure class="highlight"><pre><code class="language-matlab" data-lang="matlab"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="p">/</span><span class="nb">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>moonscript</p>
+
+<figure class="highlight"><pre><code class="language-moonscript" data-lang="moonscript"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>mosel</p>
+
+<figure class="highlight"><pre><code class="language-mosel" data-lang="mosel"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>mxml</p>
+
+<figure class="highlight"><pre><code class="language-mxml" data-lang="mxml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>nasm</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>nginx</p>
+
+<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="k">/home/hadoop/testhighlinght.sh</span> <span class="s">start</span> <span class="s">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>nim</p>
+
+<figure class="highlight"><pre><code class="language-nim" data-lang="nim"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>nix</p>
+
+<figure class="highlight"><pre><code class="language-nix" data-lang="nix"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="sx">/home/hadoop/testhighlinght.sh</span> <span class="nv">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>objective_c</p>
+
+<figure class="highlight"><pre><code class="language-objective_c" data-lang="objective_c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>ocaml</p>
+
+<figure class="highlight"><pre><code class="language-ocaml" data-lang="ocaml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>pascal</p>
+
+<figure class="highlight"><pre><code class="language-pascal" data-lang="pascal"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>perl</p>
+
+<figure class="highlight"><pre><code class="language-perl" data-lang="perl"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="sr">/home/</span><span class="nv">hadoop</span><span class="o">/</span><span class="nv">testhighlinght</span><span class="o">.</span><span class="nv">sh</span> <span class="nv">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>php</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="o">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>plaintext</p>
+
+<figure class="highlight"><pre><code class="language-plaintext" data-lang="plaintext"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>plist</p>
+
+<figure class="highlight"><pre><code class="language-plist" data-lang="plist"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="l">/home/hadoop/testhighlinght.sh</span><span class="w"> </span><span class="l">start</span><span class="w"> </span><span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>powershell</p>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="nf">/home/hadoop/testhighlinght.sh</span><span class="w"> </span><span class="nx">start</span><span class="w"> </span><span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>praat</p>
+
+<figure class="highlight"><pre><code class="language-praat" data-lang="praat"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span>home<span class="o">/</span>hadoop<span class="o">/</span>testhighlinght.sh start <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>prolog</p>
+
+<figure class="highlight"><pre><code class="language-prolog" data-lang="prolog"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="ss">home</span><span class="o">/</span><span class="ss">hadoop</span><span class="o">/</span><span class="ss">testhighlinght</span><span class="p">.</span><span class="ss">sh</span> <span class="ss">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>prometheus</p>
+
+<figure class="highlight"><pre><code class="language-prometheus" data-lang="prometheus"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>properties</p>
+
+<figure class="highlight"><pre><code class="language-properties" data-lang="properties"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/home/hadoop/testhighlinght.sh</span> <span class="err">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>protobuf</p>
+
+<figure class="highlight"><pre><code class="language-protobuf" data-lang="protobuf"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght.sh</span> <span class="n">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>puppet</p>
+
+<figure class="highlight"><pre><code class="language-puppet" data-lang="puppet"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="err">.</span><span class="n">sh</span> <span class="n">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>python</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>q</p>
+
+<figure class="highlight"><pre><code class="language-q" data-lang="q"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="cs"> </span>
+<span class="cm">/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>qml</p>
+
+<figure class="highlight"><pre><code class="language-qml" data-lang="qml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>r</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght.sh</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>racket</p>
+
+<figure class="highlight"><pre><code class="language-racket" data-lang="racket"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="nv">/home/hadoop/testhighlinght</span><span class="o">.</span><span class="nv">sh</span> <span class="nv">start</span> <span class="nv">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>ruby</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="sr">/home/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="nf">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>rust</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/</span><span class="n">home</span><span class="err">/</span><span class="n">hadoop</span><span class="err">/</span><span class="n">testhighlinght</span><span class="py">.sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>sass</p>
+
+<figure class="highlight"><pre><code class="language-sass" data-lang="sass"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nt">home</span><span class="o">/</span><span class="nt">hadoop</span><span class="o">/</span><span class="nt">testhighlinght</span><span class="nc">.sh</span> <span class="nt">start</span> <span class="k">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>scala</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="nv">testhighlinght</span><span class="o">.</span><span class="py">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>scheme</p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="nv">/home/hadoop/testhighlinght</span><span class="o">.</span><span class="nv">sh</span> <span class="nv">start</span> <span class="nv">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>scss</p>
+
+<figure class="highlight"><pre><code class="language-scss" data-lang="scss"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nt">home</span><span class="o">/</span><span class="nt">hadoop</span><span class="o">/</span><span class="nt">testhighlinght</span><span class="nc">.sh</span> <span class="nt">start</span> <span class="k">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>sed</p>
+
+<figure class="highlight"><pre><code class="language-sed" data-lang="sed"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="kn">/</span><span class="sr">home</span><span class="kn">/</span><span class="k">ha</span><span class="s">doop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>shell</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>sieve</p>
+
+<figure class="highlight"><pre><code class="language-sieve" data-lang="sieve"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/</span><span class="nx">home</span><span class="err">/</span><span class="nx">hadoop</span><span class="err">/</span><span class="nx">testhighlinght</span><span class="err">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>slim</p>
+
+<figure class="highlight"><pre><code class="language-slim" data-lang="slim"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="c">/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>smalltalk</p>
+
+<figure class="highlight"><pre><code class="language-smalltalk" data-lang="smalltalk"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/</span><span class="nv">home</span><span class="nf">/</span><span class="nv">hadoop</span><span class="nf">/</span><span class="nv">testhighlinght</span><span class="p">.</span><span class="nv">sh</span> <span class="nf">start</span> <span class="nf">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>smarty</p>
+
+<figure class="highlight"><pre><code class="language-smarty" data-lang="smarty"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>sml</p>
+
+<figure class="highlight"><pre><code class="language-sml" data-lang="sml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="n">/home/hadoop/</span><span class="nn">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="n">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>sqf</p>
+
+<figure class="highlight"><pre><code class="language-sqf" data-lang="sqf"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="vg">home</span><span class="o">/</span><span class="vg">hadoop</span><span class="o">/</span><span class="vg">testhighlinght</span><span class="err">.</span><span class="vg">sh</span> <span class="vg">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>sql</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="k">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>supercollider</p>
+
+<figure class="highlight"><pre><code class="language-supercollider" data-lang="supercollider"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>swift</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>tap</p>
+
+<figure class="highlight"><pre><code class="language-tap" data-lang="tap"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>tcl</p>
+
+<figure class="highlight"><pre><code class="language-tcl" data-lang="tcl"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>terraform</p>
+
+<figure class="highlight"><pre><code class="language-terraform" data-lang="terraform"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/</span><span class="nx">home</span><span class="err">/</span><span class="nx">hadoop</span><span class="err">/</span><span class="nx">testhighlinght</span><span class="err">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>tex</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>toml</p>
+
+<figure class="highlight"><pre><code class="language-toml" data-lang="toml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="err">/home/hadoop/testhighlinght.sh</span> <span class="err">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>tsx</p>
+
+<figure class="highlight"><pre><code class="language-tsx" data-lang="tsx"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>tulip</p>
+
+<figure class="highlight"><pre><code class="language-tulip" data-lang="tulip"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="nt">.sh</span> <span class="n">start</span> <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>turtle</p>
+
+<figure class="highlight"><pre><code class="language-turtle" data-lang="turtle"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="n">/home/hadoop/testhighlinght</span><span class="p">.</span><span class="n">sh</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="n">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>twig</p>
+
+<figure class="highlight"><pre><code class="language-twig" data-lang="twig"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>typescript</p>
+
+<figure class="highlight"><pre><code class="language-typescript" data-lang="typescript"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">hadoop</span><span class="o">/</span><span class="nx">testhighlinght</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>vala</p>
+
+<figure class="highlight"><pre><code class="language-vala" data-lang="vala"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">hadoop</span><span class="p">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="p">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>vb</p>
+
+<figure class="highlight"><pre><code class="language-vb" data-lang="vb"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>verilog</p>
+
+<figure class="highlight"><pre><code class="language-verilog" data-lang="verilog"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="p">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>vhdl</p>
+
+<figure class="highlight"><pre><code class="language-vhdl" data-lang="vhdl"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">testhighlinght</span><span class="o">.</span><span class="n">sh</span> <span class="n">start</span> <span class="o">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>viml</p>
+
+<figure class="highlight"><pre><code class="language-viml" data-lang="viml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="sr">/home/</span>hadoop/testhighlinght<span class="p">.</span><span class="k">sh</span> <span class="k">start</span> &amp;
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>vue</p>
+
+<figure class="highlight"><pre><code class="language-vue" data-lang="vue"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>wollok</p>
+
+<figure class="highlight"><pre><code class="language-wollok" data-lang="wollok"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="o">/</span><span class="kv">home</span><span class="o">/</span><span class="kv">hadoop</span><span class="o">/</span><span class="kr">test</span><span class="kv">highlinght</span>.sh<span class="w"> </span><span class="kv">start</span><span class="w"> </span><span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>xml</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+/home/hadoop/testhighlinght.sh start <span class="err">&amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>xojo</p>
+
+<figure class="highlight"><pre><code class="language-xojo" data-lang="xojo"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="w"> 
+</span><span class="c1">/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>yaml</p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre> 
+<span class="s">/home/hadoop/testhighlinght.sh start &amp;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/07/16/hell-in-heart-Copy/" data-toggle="tooltip" data-placement="top" title="地狱变相图图赏">
+                        Previous<br>
+                        <span>地狱变相图图赏</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="http://www.liuyu.com/">liuyu</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "shuanglee22";
+    var disqus_identifier = "/2019/07/17/kafka-common-commands";
+    var disqus_url = "http://localhost:4000/2019/07/17/kafka-common-commands/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/wooddice">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; 2019 Shuang Blog 
+                    <br>
+                    Powered by <a href="https://wooddice.github.io">Shuang Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=wooddice&repo=wooddice.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('false' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

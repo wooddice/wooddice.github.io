@@ -20,7 +20,7 @@ tags:
 
 
 ### 需要处理的json
-{% highlight javascript linenos%}
+{% highlight javascript %}
 {
   "observation":
     {
@@ -57,7 +57,7 @@ tags:
 {% endhighlight %}
 
 ### 希望处理后的结构
-{% highlight javascript linenos%}
+{% highlight javascript %}
 {"serialNumber":"869610030001230","resourcePath":"34/4/1","value":"99","timestamp":1557372343267}
 {"serialNumber":"869610030001230","resourcePath":"34/3/1","value":"89","timestamp":1557372343267}
 {"serialNumber":"869610030001230","resourcePath":"34/2/1","value":"93","timestamp":1557372343267}

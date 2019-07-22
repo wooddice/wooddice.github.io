@@ -5,9 +5,240 @@
     <description>世界在变化，内心在变化，所以要变化。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 19 Jul 2019 16:59:16 +0800</pubDate>
-    <lastBuildDate>Fri, 19 Jul 2019 16:59:16 +0800</lastBuildDate>
+    <pubDate>Mon, 22 Jul 2019 16:40:06 +0800</pubDate>
+    <lastBuildDate>Mon, 22 Jul 2019 16:40:06 +0800</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>Benelli502c和升仕310v比较</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;年少的时候有个梦想，有一天可以飞翔在这原野&lt;br /&gt;
+长大了就发现，只有在摩托飞驰的时候有一种仿佛飞翔的感觉&lt;br /&gt;
+或者这就是追风少年&lt;br /&gt;
+心还没老，就可以带着沉寂的热血飞翔&lt;br /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;最近在看心水的摩托，做一些笔记。&lt;br /&gt;
+从价格上考量，高配的502c是4.5w,310V的价格是2.68w&lt;br /&gt;
+从造型上说，502c更霸道，车架大，凹造型更帅&lt;br /&gt;
+从坐的感受上，502c车把宽，坐垫舒适，油箱超级大，有种胯下巨兽的感觉，310v待体验&lt;br /&gt;
+310v的无钥匙和博世最新ABS，180超宽半热熔后胎是吸引点&lt;br /&gt;
+502c的高配是Brembo卡钳，KYB减震毫无疑问是世界级的配件，以及双缸声浪美滋滋&lt;br /&gt;
+502c的0-100是5.2秒，310v的0-100是7.2秒&lt;br /&gt;
+502c的猴脸真的丑爆&lt;br /&gt;
+310v的后双减震也是很low&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;500cc的贝纳利502c&quot;&gt;500cc的贝纳利502c&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-benelli502c-zontes310v/502c1.jpg&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;/img/in-post/post-benelli502c-zontes310v/502c2.jpg&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;/img/in-post/post-benelli502c-zontes310v/502cdetail.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h4 id=&quot;技术参数&quot;&gt;技术参数&lt;/h4&gt;
+
+&lt;h5 id=&quot;动力&quot;&gt;动力&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;发动机形式 水冷/直列双缸四冲程/DOHC/每缸四气门
+排量 500 c.c.
+缸径X行程 69.0 x 66.8 mm
+压缩比 11,5:1
+最大功率 35.0kW/8500rpm
+最大扭力 45.0N·m/5000rpm
+润滑方式 湿式油底壳
+供油方式 电子燃油喷射系统
+排放系统 N/A
+排放阶段 国四
+离合器 湿式多片
+变速箱 国际六档变速
+终端传动 链条传动
+点火方式 ECU - TLI
+火花塞 NGK CR8E
+启动 电启动
+齿轮比 N/A
+主驱动 N/A
+油耗 N/A
+二氧化碳排放 N/A
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;车身&quot;&gt;车身&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;车架 钢管编织式
+前减震 倒置式 Ø 41mm
+前减震行程 125 mm
+后减震 中央可调式
+后减震行程 50 mm
+前制动 对向四活塞卡钳+280mm浮动式双碟刹盘
+前轮毂 铝合金
+前轮毂尺寸 17” x MT 3.50” DOT
+后制动 单卡钳+240mm固定式单碟刹盘
+后轮毂 铝合金
+后轮毂尺寸 17” x MT 4.5” DOT
+前轮规格 120/70 - ZR17 M/C 58W
+后轮规格 160/60 - ZR17 M/C 69W
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;规格&quot;&gt;规格&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;	长度 2280 mm
+	高度（不包含反光镜） 1140mm
+	座高 800mm
+宽度（不包含反光镜） 940mm
+离地间隙 170mm
+干重 N/A
+整备质量 217kg
+
+额定最大载质量 N/A
+油箱容量 21 lt
+机油 3 lt
+轴距 1600 mm
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;300cc的升仕310v&quot;&gt;300cc的升仕310v&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-benelli502c-zontes310v/310v1.jpg&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;/img/in-post/post-benelli502c-zontes310v/310v2.jpg&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;/img/in-post/post-benelli502c-zontes310v/310vdetail.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h4 id=&quot;技术参数-1&quot;&gt;技术参数&lt;/h4&gt;
+
+&lt;h5 id=&quot;整车--&quot;&gt;整车 	 &lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;长 (mm) 	2099
+宽 (mm) 	835
+高 (mm) 	1117
+轴距 (mm) 	1488
+整车干质量 (kg) 	147
+整车整备质量 (kg) 	157
+最小离地间隙 (mm) 	186
+油箱容量 (L) 	15
+座垫高度 (mm) 	720
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;动力系统--&quot;&gt;动力系统 	 &lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;机体 	铝合金 
+气缸总数 	单缸  
+凸轮轴方式 	双顶置凸轮轴(DOHC) 
+缸径 X 冲程 (mm) 	80 x 62 
+冷却方式 	水冷 
+燃料 	汽油 
+压缩比 	12.5:1 
+排量(ml) 	312 
+燃油供给方式 	智能电喷 
+电喷系统	德尔福
+点火方式 	电子点火 
+传动方式 	油封链 
+怠速转速 (r/min) 	1600 ± 100 
+最大功率 (kW/rpm) 	26 / 9500 
+最大扭力 (N.m/rpm) 	30 / 7500 
+变速箱 	常啮式六段变速 
+换档模式 	国际档 
+离合器 	湿式多片式 
+经济油耗 (L/km) 	3.1 /100 
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;悬挂系统&quot;&gt;悬挂系统&lt;/h5&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;车架形式 	钢管车架 
+轮胎结构 	子午线轮胎 
+前轮辋规格 	MT:3.0×17 
+后轮辋规格 	MT:5.5×17 
+前轮胎规格 	110/70R17 
+后轮胎规格 	180/55R17 
+前刹车规格 	碟刹 
+后刹车规格 	碟刹 
+大灯/尾灯/转向灯 	LED 
+ABS制动系统	博世
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Tue, 23 Jul 2019 00:02:22 +0800</pubDate>
+        <link>http://localhost:4000/2019/07/23/benelli502c-zontes310v/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/07/23/benelli502c-zontes310v/</guid>
+        
+        <category>502c</category>
+        
+        <category>310v</category>
+        
+        <category>Cruise Motorcycle</category>
+        
+        
+      </item>
     
       <item>
         <title>Java 数组和字符串互相转换</title>
@@ -193,8 +424,8 @@ split() 方法根据匹配给定的正则表达式来拆分字符串。
 
 </description>
         <pubDate>Sat, 20 Jul 2019 00:42:22 +0800</pubDate>
-        <link>http://localhost:4000/2019/07/20/java-array-cover-string-and-date-compare/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/07/20/java-array-cover-string-and-date-compare/</guid>
+        <link>http://localhost:4000/2019/07/20/java-array-cover-string-and-date-compare-Copy/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/07/20/java-array-cover-string-and-date-compare-Copy/</guid>
         
         <category>java</category>
         

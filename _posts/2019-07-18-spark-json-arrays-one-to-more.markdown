@@ -12,6 +12,7 @@ tags:
     - spark
     - java
     - dataset
+    - sql
 ---
 
 > hadoop使用版本：hadoop-2.6.0-cdh5.11.0 <br/>

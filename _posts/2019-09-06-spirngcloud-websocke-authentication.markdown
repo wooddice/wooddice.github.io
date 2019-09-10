@@ -43,9 +43,6 @@ public class RequestListenerForWebSocket implements ServletRequestListener {
         LOG.info("websockserver add httpSession {} to all request",session.getId());
         HttpServletRequest hsr = (HttpServletRequest) sre.getServletRequest();
         String user = hsr.getHeader("userName");
-//        String token = hsr.getHeader("ockue22");
-//        LOG.info("websockserver get user {} ",user);
-//        LOG.info("websockserver get token {} ",token);
         if(StringUtils.isNotEmpty(user)){
             //only save session-user one day
             redisUtil.hset(session.getId(),"username",user,dataNum,86400L);
@@ -68,9 +65,6 @@ public class WebSocketConfig  extends ServerEndpointConfig.Configurator{
     public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
     }
-
-
-
 
     @Override
     public void modifyHandshake(ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
@@ -199,7 +193,7 @@ public class AppWebSocket {
 
     private HttpSession httpSession;
 
-    private static final String USERKEY = "owername";
+    private String sessionUsername;
 
     private final int dataNum=1;
 
@@ -212,8 +206,8 @@ public class AppWebSocket {
         this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
         String username = (String) redisUtil.hget(httpSession.getId(),"username",dataNum);
         if(StringUtils.isNotEmpty(username)){
-            httpSession.setAttribute(USERKEY,username);
-            LOG.info("websockserver AppWebSocket httpSession get username : {}",username);
+            this.sessionUsername = username;
+            LOG.info("websockserver AppWebSocket sessionUsername : {}",username);
         }
         webSocketSet.add(this);
         //addOnlineCount();
@@ -230,9 +224,8 @@ public class AppWebSocket {
     public static synchronized void sendInfoToOwer(String message, List<String> userlist) throws IOException {
         for (AppWebSocket item : webSocketSet) {
             try {
-
-                if(item.httpSession.getAttribute(USERKEY)!=null&&userlist.contains(item.httpSession.getAttribute(USERKEY).toString())){
-                    LOG.debug("sent web socket data: " + message + "to Ower :{}" + item.httpSession.getAttribute(USERKEY).toString() );
+                if(item.sessionUsername!=null&&userlist.contains(item.sessionUsername)){
+                    LOG.debug("sent web socket data: " + message + "to Ower :{}" + item.sessionUsername );
                     item.sendMessage(message);
                 }
             } catch (IOException e) {

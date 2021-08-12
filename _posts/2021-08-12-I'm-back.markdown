@@ -4,7 +4,7 @@ title:        "时隔近2年，我又回来了"
 subtitle:     "I'm back."
 date:         2021-08-12 11:49:22
 author:       "Shuang"
-header-img:   "img/in-post/new-base.png"
+header-img:   "img/in-post/new-base.jpg"
 header-mask:  0.3
 catalog:      true
 multilingual: false

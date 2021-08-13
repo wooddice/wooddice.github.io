@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="世界在变化，内心在变化，所以要变化。">
+    <meta name="keywords"  content="shuanglee, Blog, 博客, 个人网站, 互联网, Web">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="springcloud使用websock - Shuang的博客 | Shuang Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="
+  使用版本：springboot1.5 
+
+
+">
+    
+    <meta property="article:published_time" content="2019-09-06T23:52:22Z">
+    
+    
+    <meta property="article:author" content="Shuang">
+    
+    
+    <meta property="article:tag" content="java">
+    
+    <meta property="article:tag" content="springcloud">
+    
+    
+    <meta property="og:image" content="http://0.0.0.0:4000/img/avatar-ny.jpg">
+    <meta property="og:url" content="http://0.0.0.0:4000/2019/09/06/spirngcloud-websocke-authentication/">
+    <meta property="og:site_name" content="Shuang的博客 | Shuang Blog">
+    
+    <title>springcloud使用websock - Shuang的博客 | Shuang Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://0.0.0.0:4000/2019/09/06/spirngcloud-websocke-authentication/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Shuang Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="blog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#blog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __Nav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __Nav__.close()
+        }else{
+            __Nav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close Nav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __Nav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/in-post/code_head.png" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/in-post/code_head.png');
+        background: ;
+    }
+
+    
+    header.intro-header .header-mask{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(0,0,0, 0.3);
+    }
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=java" title="java">java</a>
+                        
+                        <a class="tag" href="/archive/?tag=springcloud" title="springcloud">springcloud</a>
+                        
+                    </div>
+                    <h1>springcloud使用websock</h1>
+                    
+                    <h2 class="subheading">结合redis做权限分流</h2>
+                    <span class="meta">Posted by Shuang on September 6, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<blockquote>
+  <p>使用版本：springboot1.5 <br /></p>
+</blockquote>
+
+<p>因为涉及到springcloud架构，用户的信息是通过zuul转发到下游服务端&lt;/br&gt;
+所以首先要先把request中的token或者user信息截取出来和websock的httpsession做绑定放入redis中&lt;/br&gt;
+在websocke的推送类中根据redis中的权限信息做权限适配&lt;/br&gt;
+其中核心问题在于：</p>
+<ul>
+  <li>由于HTTP协议与websocket协议的不同，导致没法直接从websocket中获取协议，需要写一个继承ServletRequestListener的监听器，把zuul传递的用户信息和当前HttpSession关联起来入redis</li>
+  <li>因为WebSocket对象根本不存在与Spring容器中，所以传统的ContextLoader.getCurrentWebApplicationContext()自然也就无法使用。需要自定义ApplicationContextAware在项目加载时就获得项目的Spring容器</li>
+</ul>
+
+<h3 id="配置监听类">配置监听类</h3>
+<p>配置一个继承ServletRequestListener的监听类，把zuul传递的用户信息和当前httpsession的id关联起来</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td><td class="code"><pre><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RequestListenerForWebSocket</span> <span class="kd">implements</span> <span class="nc">ServletRequestListener</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="no">LOG</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">RequestListenerForWebSocket</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">RedisUtilSynchronized</span> <span class="n">redisUtil</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">dataNum</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span>
+
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">requestInitialized</span><span class="o">(</span><span class="nc">ServletRequestEvent</span> <span class="n">sre</span><span class="o">)</span>  <span class="o">{</span>
+        <span class="nc">HttpSession</span> <span class="n">session</span> <span class="o">=</span> <span class="o">((</span><span class="nc">HttpServletRequest</span><span class="o">)</span> <span class="n">sre</span><span class="o">.</span><span class="na">getServletRequest</span><span class="o">()).</span><span class="na">getSession</span><span class="o">();</span>
+        <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"websockserver add httpSession {} to all request"</span><span class="o">,</span><span class="n">session</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+        <span class="nc">HttpServletRequest</span> <span class="n">hsr</span> <span class="o">=</span> <span class="o">(</span><span class="nc">HttpServletRequest</span><span class="o">)</span> <span class="n">sre</span><span class="o">.</span><span class="na">getServletRequest</span><span class="o">();</span>
+        <span class="nc">String</span> <span class="n">user</span> <span class="o">=</span> <span class="n">hsr</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"userName"</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">isNotEmpty</span><span class="o">(</span><span class="n">user</span><span class="o">)){</span>
+            <span class="c1">//only save session-user one day</span>
+            <span class="n">redisUtil</span><span class="o">.</span><span class="na">hset</span><span class="o">(</span><span class="n">session</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span><span class="s">"username"</span><span class="o">,</span><span class="n">user</span><span class="o">,</span><span class="n">dataNum</span><span class="o">,</span><span class="mi">86400L</span><span class="o">);</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">RequestListenerForWebSocket</span><span class="o">()</span> <span class="o">{}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">requestDestroyed</span><span class="o">(</span><span class="nc">ServletRequestEvent</span> <span class="n">arg0</span><span class="o">)</span>  <span class="o">{}</span>
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="websock配置类">websock配置类</h3>
+<p>配置WebSocketConfig，把httpsession传递到websock应用类</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebSocketConfig</span>  <span class="kd">extends</span> <span class="nc">ServerEndpointConfig</span><span class="o">.</span><span class="na">Configurator</span><span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="no">LOG</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">WebSocketConfig</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">ServerEndpointExporter</span> <span class="nf">serverEndpointExporter</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">ServerEndpointExporter</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">modifyHandshake</span><span class="o">(</span><span class="nc">ServerEndpointConfig</span> <span class="n">sec</span><span class="o">,</span> <span class="nc">HandshakeRequest</span> <span class="n">request</span><span class="o">,</span> <span class="nc">HandshakeResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">HttpSession</span> <span class="n">httpSession</span> <span class="o">=</span> <span class="o">(</span><span class="nc">HttpSession</span><span class="o">)</span> <span class="n">request</span><span class="o">.</span><span class="na">getHttpSession</span><span class="o">();</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">httpSession</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+            <span class="n">sec</span><span class="o">.</span><span class="na">getUserProperties</span><span class="o">().</span><span class="na">put</span><span class="o">(</span><span class="nc">HttpSession</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="n">httpSession</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">modifyHandshake</span><span class="o">(</span><span class="n">sec</span><span class="o">,</span> <span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="配置读取spring容器类">配置读取spring容器类</h3>
+<ul>
+  <li>为了解决在websocket的环境中无法使用@Autowired注解注入类</li>
+  <li>目的是获取到Spring容器，进行手动注入</li>
+  <li>因为新生成的WebSocket对象根本不存在与Spring容器中，所以传统的ContextLoader.getCurrentWebApplicationContext()无法使用。</li>
+  <li>这个类为了项目加载时就获得项目的Spring容器</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+</pre></td><td class="code"><pre><span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">SpringUtil</span> <span class="kd">implements</span> <span class="nc">BeanFactoryPostProcessor</span> <span class="o">{</span>
+
+     <span class="cm">/*
+      *Spring应用上下文环境
+      */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanFactory</span><span class="o">(</span><span class="nc">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
+        <span class="nc">SpringUtil</span><span class="o">.</span><span class="na">beanFactory</span> <span class="o">=</span> <span class="n">beanFactory</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ConfigurableListableBeanFactory</span> <span class="nf">getBeanFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">beanFactory</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 获取对象
+     *
+     * @param name
+     * @return Object 一个以所给名字注册的bean的实例
+     * @throws org.springframework.beans.BeansException
+     *
+     */</span>
+    <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="no">T</span> <span class="nf">getBean</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="no">T</span><span class="o">)</span> <span class="n">getBeanFactory</span><span class="o">().</span><span class="na">getBean</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 获取类型为requiredType的对象
+     *
+     * @param clz
+     * @return
+     * @throws org.springframework.beans.BeansException
+     *
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="no">T</span> <span class="nf">getBean</span><span class="o">(</span><span class="nc">Class</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">clz</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
+        <span class="no">T</span> <span class="n">result</span> <span class="o">=</span> <span class="o">(</span><span class="no">T</span><span class="o">)</span> <span class="n">getBeanFactory</span><span class="o">().</span><span class="na">getBean</span><span class="o">(</span><span class="n">clz</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 如果BeanFactory包含一个与所给名称匹配的bean定义，则返回true
+     *
+     * @param name
+     * @return boolean
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">containsBean</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">getBeanFactory</span><span class="o">().</span><span class="na">containsBean</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 判断以给定名字注册的bean定义是一个singleton还是一个prototype。 如果与给定名字相应的bean定义没有被找到，将会抛出一个异常（NoSuchBeanDefinitionException）
+     *
+     * @param name
+     * @return boolean
+     * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
+     *
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">isSingleton</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">NoSuchBeanDefinitionException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">getBeanFactory</span><span class="o">().</span><span class="na">isSingleton</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * @param name
+     * @return Class 注册对象的类型
+     * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
+     *
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">getType</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">NoSuchBeanDefinitionException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">getBeanFactory</span><span class="o">().</span><span class="na">getType</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 如果给定的bean名字在bean定义中有别名，则返回这些别名
+     *
+     * @param name
+     * @return
+     * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
+     *
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span><span class="o">[]</span> <span class="nf">getAliases</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">NoSuchBeanDefinitionException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">getBeanFactory</span><span class="o">().</span><span class="na">getAliases</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="配置websock应用类">配置websock应用类</h3>
+<p>实现在websock应用中使用spring容器里面的实例，完成redis应用类的注入
+根据redis中的缓存内容完成传输数据和关联用户的适配，达到限制内容传输到页面端的权限限制</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+</pre></td><td class="code"><pre><span class="nd">@Component</span>
+<span class="nd">@ServerEndpoint</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/websocket/data"</span><span class="o">,</span><span class="n">configurator</span> <span class="o">=</span> <span class="nc">WebSocketConfig</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppWebSocket</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="no">LOG</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">AppWebSocket</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="c1">//private volatile static int onlineCount = 0;</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">CopyOnWriteArraySet</span><span class="o">&lt;</span><span class="nc">AppWebSocket</span><span class="o">&gt;</span> <span class="n">webSocketSet</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CopyOnWriteArraySet</span><span class="o">&lt;</span><span class="nc">AppWebSocket</span><span class="o">&gt;();</span>
+
+    <span class="kd">private</span> <span class="nc">Session</span> <span class="n">session</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">RedisUtilSynchronized</span> <span class="n">redisUtil</span> <span class="o">=</span> <span class="nc">SpringUtil</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="nc">RedisUtilSynchronized</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="kd">private</span> <span class="nc">HttpSession</span> <span class="n">httpSession</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">sessionUsername</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">dataNum</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span>
+
+
+
+
+    <span class="nd">@OnOpen</span>
+    <span class="kd">public</span>  <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">onOpen</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">"device"</span><span class="o">)</span> <span class="nc">String</span> <span class="n">device</span><span class="o">,</span> <span class="nc">Session</span> <span class="n">session</span><span class="o">,</span><span class="nc">EndpointConfig</span> <span class="n">config</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">session</span> <span class="o">=</span> <span class="n">session</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">httpSession</span> <span class="o">=</span> <span class="o">(</span><span class="nc">HttpSession</span><span class="o">)</span> <span class="n">config</span><span class="o">.</span><span class="na">getUserProperties</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="nc">HttpSession</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+        <span class="nc">String</span> <span class="n">username</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span> <span class="n">redisUtil</span><span class="o">.</span><span class="na">hget</span><span class="o">(</span><span class="n">httpSession</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span><span class="s">"username"</span><span class="o">,</span><span class="n">dataNum</span><span class="o">);</span>
+        <span class="k">if</span><span class="o">(</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">isNotEmpty</span><span class="o">(</span><span class="n">username</span><span class="o">)){</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">sessionUsername</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+            <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"websockserver AppWebSocket sessionUsername : {}"</span><span class="o">,</span><span class="n">username</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">webSocketSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="c1">//addOnlineCount();</span>
+        <span class="kt">int</span> <span class="n">onlineCount</span> <span class="o">=</span> <span class="n">webSocketSet</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+        <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"New connection for "</span> <span class="o">+</span> <span class="n">device</span> <span class="o">+</span> <span class="s">", total "</span> <span class="o">+</span> <span class="n">onlineCount</span>  <span class="o">+</span> <span class="s">" connections"</span> <span class="o">+</span> <span class="s">"session :"</span> <span class="o">+</span> <span class="n">session</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+        	
+            <span class="n">sendMessage</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">onlineCount</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="no">LOG</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"IOException: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">sendInfoToOwer</span><span class="o">(</span><span class="nc">String</span> <span class="n">message</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">userlist</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">AppWebSocket</span> <span class="n">item</span> <span class="o">:</span> <span class="n">webSocketSet</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">if</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="na">sessionUsername</span><span class="o">!=</span><span class="kc">null</span><span class="o">&amp;&amp;</span><span class="n">userlist</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">item</span><span class="o">.</span><span class="na">sessionUsername</span><span class="o">)){</span>
+                    <span class="no">LOG</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"sent web socket data: "</span> <span class="o">+</span> <span class="n">message</span> <span class="o">+</span> <span class="s">"to Ower :{}"</span> <span class="o">+</span> <span class="n">item</span><span class="o">.</span><span class="na">sessionUsername</span> <span class="o">);</span>
+                    <span class="n">item</span><span class="o">.</span><span class="na">sendMessage</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="no">LOG</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"sent web socket data IOException error: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IllegalStateException</span> <span class="n">e</span><span class="o">){</span>
+                <span class="no">LOG</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"sent web socket data IllegalStateException error: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="err">｝</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/08/01/cassandra-cql/" data-toggle="tooltip" data-placement="top" title="Cassandra的cql使用介绍">
+                        Previous<br>
+                        <span>Cassandra的cql使用介绍</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/10/30/feeling-busy-and-special/" data-toggle="tooltip" data-placement="top" title="最近的事情就是波涛起伏">
+                        Next<br>
+                        <span>最近的事情就是波涛起伏</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0009" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="3">java</a>
+        
+                <a data-sort="0010" 
+                    href="/archive/?tag=%E5%BF%83%E6%83%85"
+                    title="心情"
+                    rel="2">心情</a>
+        
+                <a data-sort="0010" 
+                    href="/archive/?tag=sql"
+                    title="sql"
+                    rel="2">sql
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="http://www.liuyu.com/">liuyu</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "shuanglee22";
+    var disqus_identifier = "/2019/09/06/spirngcloud-websocke-authentication";
+    var disqus_url = "http://0.0.0.0:4000/2019/09/06/spirngcloud-websocke-authentication/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/wooddice">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; 2021 Shuang Blog 
+                    <br>
+                    Powered by <a href="https://wooddice.github.io">Shuang Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=wooddice&repo=wooddice.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('false' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

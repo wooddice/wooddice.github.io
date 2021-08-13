@@ -31,8 +31,8 @@
     <meta property="article:tag" content="sql">
     
     
-    <meta property="og:image" content="http://localhost:4000/img/avatar-ny.jpg">
-    <meta property="og:url" content="http://localhost:4000/2019/08/01/cassandra-cql/">
+    <meta property="og:image" content="http://0.0.0.0:4000/img/avatar-ny.jpg">
+    <meta property="og:url" content="http://0.0.0.0:4000/2019/08/01/cassandra-cql/">
     <meta property="og:site_name" content="Shuang的博客 | Shuang Blog">
     
     <title>Cassandra的cql使用介绍 - Shuang的博客 | Shuang Blog</title>
@@ -44,7 +44,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2019/08/01/cassandra-cql/">
+    <link rel="canonical" href="http://0.0.0.0:4000/2019/08/01/cassandra-cql/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -109,6 +109,8 @@
                     <li>
                         <a href="/archive/">Archive</a>
                     </li>
+                    
+                    
                     
                     
                     
@@ -268,12 +270,12 @@
 11
 </pre></td><td class="code"><pre><span class="n">cassandra</span><span class="o">@</span><span class="n">cqlsh</span><span class="p">:</span><span class="n">xxxxxxx</span><span class="o">&gt;</span> <span class="k">describe</span> <span class="n">test_key_query_in_cassandra</span> <span class="p">;</span>
 <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">test_key_query_in_cassandra</span> <span class="p">(</span>
-    <span class="n">a</span> <span class="n">INT</span><span class="p">,</span>
-    <span class="n">b</span> <span class="n">INT</span><span class="p">,</span>
-    <span class="k">c</span> <span class="n">INT</span><span class="p">,</span>
-    <span class="n">d</span> <span class="n">INT</span><span class="p">,</span>
-    <span class="n">e</span> <span class="n">INT</span><span class="p">,</span>
-    <span class="n">value</span> <span class="n">text</span><span class="p">,</span>
+    <span class="n">a</span> <span class="nb">INT</span><span class="p">,</span>
+    <span class="n">b</span> <span class="nb">INT</span><span class="p">,</span>
+    <span class="k">c</span> <span class="nb">INT</span><span class="p">,</span>
+    <span class="n">d</span> <span class="nb">INT</span><span class="p">,</span>
+    <span class="n">e</span> <span class="nb">INT</span><span class="p">,</span>
+    <span class="n">value</span> <span class="nb">text</span><span class="p">,</span>
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
 <span class="p">);</span>
 <span class="k">CREATE</span> <span class="k">INDEX</span> <span class="k">ON</span> <span class="n">test</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
@@ -397,12 +399,12 @@
 <span class="n">cassandra</span><span class="o">@</span><span class="n">cqlsh</span><span class="p">:</span><span class="n">xxxxxxx</span><span class="o">&gt;</span> <span class="k">describe</span> <span class="n">tri_client_data_recording</span> <span class="p">;</span>
 
 <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">tri_client_data_recording</span> <span class="p">(</span>
-    <span class="n">endpoint</span> <span class="n">text</span><span class="p">,</span>
-    <span class="n">start_date</span> <span class="k">timestamp</span><span class="p">,</span>
-    <span class="n">resource_uri</span> <span class="n">text</span><span class="p">,</span>
-    <span class="n">subscription_id</span> <span class="n">text</span><span class="p">,</span>
-    <span class="n">condition</span> <span class="n">text</span><span class="p">,</span>
-    <span class="n">value</span> <span class="n">text</span><span class="p">,</span>
+    <span class="n">endpoint</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">start_date</span> <span class="nb">timestamp</span><span class="p">,</span>
+    <span class="n">resource_uri</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">subscription_id</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">condition</span> <span class="nb">text</span><span class="p">,</span>
+    <span class="n">value</span> <span class="nb">text</span><span class="p">,</span>
     <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">resource_uri</span><span class="p">,</span> <span class="n">subscription_id</span><span class="p">,</span> <span class="n">condition</span><span class="p">)</span>
 <span class="p">)</span> <span class="k">WITH</span> <span class="n">CLUSTERING</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="p">(</span><span class="n">start_date</span> <span class="k">ASC</span><span class="p">,</span> <span class="n">resource_uri</span> <span class="k">ASC</span><span class="p">,</span> <span class="n">subscription_id</span> <span class="k">ASC</span><span class="p">,</span> <span class="n">condition</span> <span class="k">ASC</span><span class="p">)</span>
     <span class="k">AND</span> <span class="n">bloom_filter_fp_chance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">01</span>
@@ -441,6 +443,13 @@
                         </a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2019/09/06/spirngcloud-websocke-authentication/" data-toggle="tooltip" data-placement="top" title="springcloud使用websock">
+                        Next<br>
+                        <span>springcloud使用websock</span>
+                        </a>
+                    </li>
                     
                 </ul>
                 <hr style="visibility: hidden;">
@@ -495,12 +504,17 @@
         </a>
         
         
-                <a data-sort="0007" 
+                <a data-sort="0009" 
                     href="/archive/?tag=java"
                     title="java"
-                    rel="2">java</a>
+                    rel="3">java</a>
         
-                <a data-sort="0007" 
+                <a data-sort="0010" 
+                    href="/archive/?tag=%E5%BF%83%E6%83%85"
+                    title="心情"
+                    rel="2">心情</a>
+        
+                <a data-sort="0010" 
                     href="/archive/?tag=sql"
                     title="sql"
                     rel="2">sql
@@ -535,7 +549,7 @@
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "shuanglee22";
     var disqus_identifier = "/2019/08/01/cassandra-cql";
-    var disqus_url = "http://localhost:4000/2019/08/01/cassandra-cql/";
+    var disqus_url = "http://0.0.0.0:4000/2019/08/01/cassandra-cql/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -615,7 +629,7 @@
 </ul>
 
                 <p class="copyright text-muted">
-                    Copyright &copy; 2019 Shuang Blog 
+                    Copyright &copy; 2021 Shuang Blog 
                     <br>
                     Powered by <a href="https://wooddice.github.io">Shuang Blog</a> |
                     <iframe

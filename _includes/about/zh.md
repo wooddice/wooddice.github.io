@@ -9,7 +9,7 @@ Hey，我来了，开始享受github page的blog生活。<br>
 ![](/img/about_xiaohui4.jpg)
 ### 2021
 时光变迁，我觉得还是要记录点什么。<br>
-今日的路途早已换了出行的伙伴，然而掐指一算，新伙伴的生命也已过去一。<br>
+今日的路途早已换了出行的伙伴，然而掐指一算，新伙伴的生命也已过去一半。<br>
 小三儿也已陪伴了6年。<br>
 ![](/img/about_xiaosan1.jpg)
 ![](/img/about_xiaosan2.jpg)
